@@ -1,0 +1,27 @@
+{
+  "name": "dotcreativeagency-plugins",
+  "owner": {
+    "name": "Rocco",
+    "email": ""
+  },
+  "metadata": {
+    "description": "Claude Code plugins by dotCreativeAgency",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "frontend-pipeline",
+      "source": {
+        "source": "github",
+        "repo": "dotCreativeAgency/frontend-pipeline"
+      },
+      "description": "Automated frontend pipeline with 4 agents (architect, reviewer, debugger, refactorer) and MUI/React best practices skill for React + MUI + TypeScript projects.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Rocco"
+      },
+      "category": "development",
+      "tags": ["react", "mui", "typescript", "frontend", "code-review", "accessibility"]
+    }
+  ]
+}
