@@ -11,10 +11,7 @@
   "plugins": [
     {
       "name": "frontend-pipeline",
-      "source": {
-        "source": "url",
-        "url": "https://github.com/dotCreativeAgency/frontend-pipeline.git"
-      },
+      "source": "./plugins/frontend-pipeline",
       "description": "Automated frontend pipeline with 4 agents (architect, reviewer, debugger, refactorer) and MUI/React best practices skill for React + MUI + TypeScript projects.",
       "version": "1.0.0",
       "author": {

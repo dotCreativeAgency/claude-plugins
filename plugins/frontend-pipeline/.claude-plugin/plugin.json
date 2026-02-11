@@ -1,0 +1,12 @@
+{
+  "name": "frontend-pipeline",
+  "version": "1.0.0",
+  "description": "Automated frontend development pipeline with 4 specialized agents (architect, reviewer, debugger, refactorer) and MUI/React best practices skill for React + MUI + TypeScript projects.",
+  "author": {
+    "name": "Rocco"
+  },
+  "repository": "https://github.com/dotCreativeAgency/frontend-pipeline",
+  "homepage": "https://github.com/dotCreativeAgency/frontend-pipeline#readme",
+  "license": "MIT",
+  "keywords": ["react", "mui", "typescript", "frontend", "pipeline", "code-review", "accessibility"]
+}
