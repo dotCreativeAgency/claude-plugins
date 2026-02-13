@@ -1,6 +1,6 @@
 ---
 name: mui-react-development
-description: "This skill should be used when building, styling, or debugging React components with MUI (Material UI) v7, MUI X v8 (DataGrid, DatePicker), or related stack libraries. Activates for tasks like 'create a form', 'build a data table', 'add pagination', 'create a dialog', 'set up routing', 'add form validation', implementing server state with TanStack Query (useQuery, useMutation), configuring MUI themes, using the sx prop, setting up React Router routes, or working with any MUI component (Grid, Dialog, Drawer, TextField, etc.). Also relevant when the user mentions component styling, palette, typography, responsive layout, or Zod validation in React + MUI projects."
+description: "This skill should be used when building, styling, or debugging React components with MUI (Material UI) v7, MUI X v8 (DataGrid, DatePicker), TanStack Query v5, React Hook Form + Zod, or React Router v7. Activates for tasks like 'create a form with validation', 'build a data table', 'add server-side pagination', 'create a dialog', 'configure MUI theme', 'use the sx prop', useQuery, useMutation, or 'crea un componente React con MUI', 'aggiungi una tabella dati'. Also relevant for Grid layout, responsive design, and WCAG accessibility in MUI projects."
 ---
 
 # MUI + React Full Stack Development Patterns
@@ -15,18 +15,16 @@ MUI v7 unified the Grid API. The old `Grid2` and `Unstable_Grid2` no longer exis
 
 ```tsx
 // CORRECT - MUI v7
-import { Grid } from '@mui/material';
-
 <Grid container spacing={2}>
   <Grid size={{ xs: 12, md: 6 }}>Content</Grid>
-  <Grid size={{ xs: 12, md: 6 }}>Content</Grid>
 </Grid>
+
+// WRONG - removed in v7
+<Grid item xs={12} md={6}>Content</Grid>
+<Grid2 size={{ xs: 12 }}>Content</Grid2>
 ```
 
-**Never do:**
-- Import `Grid2` or `Unstable_Grid2` (removed in v7)
-- Use `item` prop (removed in v7)
-- Use old breakpoint props: `<Grid xs={12} md={6}>` (use `size` prop instead)
+> For responsive patterns, auto-sizing, and v6->v7 migration table, see `references/mui-v7-patterns.md`
 
 ### sx Prop Over Inline Styles
 
@@ -57,11 +55,18 @@ sx={{ color: '#673ab7', borderRadius: '4px', padding: '16px' }}
 MUI v7 uses slots for component customization:
 
 ```tsx
+// CORRECT - MUI v7 slot pattern
 <TextField
   slotProps={{
     input: { 'aria-label': 'Search' },
     inputLabel: { shrink: true }
   }}
+/>
+
+// WRONG - deprecated in MUI v7
+<TextField
+  InputProps={{ 'aria-label': 'Search' }}
+  InputLabelProps={{ shrink: true }}
 />
 ```
 
@@ -70,13 +75,8 @@ MUI v7 uses slots for component customization:
 ### DataGrid
 
 ```tsx
-import { DataGrid, type GridColDef, type GridPaginationModel } from '@mui/x-data-grid';
+import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import { itIT } from '@mui/x-data-grid/locales'; // Italian locale
-
-const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'name', headerName: 'Name', flex: 1 },
-];
 
 <DataGrid
   rows={rows}
@@ -87,6 +87,8 @@ const columns: GridColDef[] = [
   localeText={itIT.components.MuiDataGrid.defaultProps.localeText}
 />
 ```
+
+> For server-side pagination, custom column renderers, and toolbar patterns, see `references/mui-v7-patterns.md`
 
 ### DatePickers
 
@@ -186,6 +188,8 @@ const mutation = useMutation({
 - Invalidate related queries after mutations
 - Use `queryKey` arrays for cache management
 - Set appropriate `staleTime` based on data freshness needs
+
+> For error handling, optimistic updates, dependent queries, and prefetching patterns, see `references/react-stack-patterns.md`
 
 ## React Hook Form + Zod
 
@@ -306,7 +310,7 @@ Use the documentation page URLs found in the index (Step 1) as input to the MUI 
 - `@mui/x-data-grid` v8: Use `@mui/x-data-grid@8.8.0` docs URL
 - `@mui/x-date-pickers` v8: Use `@mui/x-date-pickers@8.8.0` docs URL
 
-> **Note**: Version numbers above are verified at time of writing. Check for newer docs URLs if MUI has released major updates.
+> **Note**: Version numbers above are verified as of Feb 2026. Check for newer docs URLs if MUI has released major updates.
 
 For non-MUI libraries in the stack (TanStack Query, Zod, React Router), use Context7 MCP: `mcp__plugin_context7_context7__resolve-library-id` + `query-docs`.
 

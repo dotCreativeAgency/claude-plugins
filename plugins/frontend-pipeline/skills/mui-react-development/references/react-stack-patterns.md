@@ -10,7 +10,7 @@ Advanced patterns for TanStack Query v5, React Hook Form + Zod, React Router v7,
 
 ```tsx
 import { useQuery } from '@tanstack/react-query';
-import { apiClient } from '@api/client';
+import { apiClient } from '@api/client'; // Project-specific API client - adjust import path to your project
 
 interface UseUsersOptions {
   page?: number;
@@ -437,8 +437,10 @@ function AppBreadcrumbs() {
 
 ### Memoization
 
+> **React 19 Note**: The React 19 compiler can auto-memoize components, values, and callbacks. If using React 19 with the compiler enabled, manual `useMemo`, `useCallback`, and `memo` are often unnecessary. Use manual memoization only when targeting React 18 or when the compiler is not enabled.
+
 ```tsx
-// Memoize expensive computations
+// Memoize expensive computations (React 18 or compiler not enabled)
 const filteredUsers = useMemo(
   () => users.filter((u) => u.name.includes(search)),
   [users, search]
