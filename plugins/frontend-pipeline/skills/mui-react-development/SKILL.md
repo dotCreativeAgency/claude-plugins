@@ -264,15 +264,51 @@ const navigate = useNavigate();
 const { id } = useParams<{ id: string }>();
 ```
 
-## MUI MCP Documentation Lookup
+## MUI MCP Server Setup
 
-Before writing MUI component code, always verify the API with the MUI MCP tool:
+The **MUI MCP server** (`@mui/mcp`) provides direct access to official MUI documentation and API references. It should be installed and running for optimal MUI development support.
+
+**Installation:**
+```bash
+npx -y @mui/mcp@latest
+```
+
+**MCP Configuration** (add to `.mcp.json` or project MCP settings):
+```json
+{
+  "mcpServers": {
+    "mui-mcp": {
+      "command": "npx",
+      "args": ["-y", "@mui/mcp@latest"]
+    }
+  }
+}
+```
+
+If the MUI MCP server is unavailable, inform the user that documentation lookup is limited and provide the installation configuration above. Proceed using the patterns documented in this skill and reference files as fallback.
+
+## MUI Documentation Lookup
+
+### Step 1: Consult the MUI Documentation Index
+
+Before writing MUI component code, fetch the MUI documentation index to identify the relevant documentation pages:
+
+- **Documentation Index URL**: `https://mui.com/material-ui/llms.txt`
+- Use `WebFetch` to retrieve the index and locate the specific component/API documentation page
+- The index contains links to all MUI components, customization guides, migration guides, and integration docs
+- If `WebFetch` is unavailable or the request fails, skip to Step 2 and use the MUI MCP tool directly
+
+### Step 2: Verify API with MUI MCP
+
+Use the documentation page URLs found in the index (Step 1) as input to the MUI MCP tool for precise API verification:
 
 - `@mui/material` v7: Use `mcp__mui-mcp__useMuiDocs` with `@mui/material@7.2.0` docs URL
 - `@mui/x-data-grid` v8: Use `@mui/x-data-grid@8.8.0` docs URL
 - `@mui/x-date-pickers` v8: Use `@mui/x-date-pickers@8.8.0` docs URL
 
-For other libraries, use Context7 MCP: `mcp__plugin_context7_context7__resolve-library-id` + `query-docs`.
+> **Note**: Version numbers above are verified at time of writing. Check for newer docs URLs if MUI has released major updates.
+
+For non-MUI libraries in the stack (TanStack Query, Zod, React Router), use Context7 MCP: `mcp__plugin_context7_context7__resolve-library-id` + `query-docs`.
 
 ## Additional Resources
 

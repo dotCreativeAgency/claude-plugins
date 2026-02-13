@@ -138,7 +138,7 @@ This plugin leverages these MCP servers when available in the target environment
 
 | MCP Server | Tools Used | Purpose |
 |------------|------------|---------|
-| MUI MCP | `useMuiDocs` | MUI v7 API documentation lookup |
+| MUI MCP (`npx -y @mui/mcp@latest`) | `useMuiDocs` | MUI v7 API documentation lookup (required) |
 | Context7 | `resolve-library-id`, `query-docs` | Library documentation (React, TanStack Query, Zod) |
 | Chrome DevTools | `list_tabs`, `evaluate_expression`, `console_logs` | Live browser inspection for debugging |
 | Memory | `create_memory`, `query_memories` | Persist review sessions across conversations |
