@@ -12,8 +12,8 @@
     {
       "name": "frontend-pipeline",
       "source": "./plugins/frontend-pipeline",
-      "description": "Automated frontend pipeline with 4 agents (architect, reviewer, debugger, refactorer) and MUI/React best practices skill for React + MUI + TypeScript projects.",
-      "version": "1.1.0",
+      "description": "Automated frontend pipeline with 5 agents (architect, reviewer, debugger, refactorer, chrome-devtools-analyzer), mandatory chain enforcement, /chain command, and MUI/React best practices skill for React + MUI + TypeScript projects.",
+      "version": "1.2.0",
       "author": {
         "name": "Rocco"
       },

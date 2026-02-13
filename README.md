@@ -16,7 +16,7 @@ Marketplace di plugin per Claude Code.
 
 | Plugin | Versione | Descrizione |
 |--------|----------|-------------|
-| [frontend-pipeline](./plugins/frontend-pipeline) | 1.0.0 | Pipeline automatizzata per lo sviluppo frontend React + MUI + TypeScript con 4 agenti specializzati |
+| [frontend-pipeline](./plugins/frontend-pipeline) | 1.2.0 | Pipeline automatizzata per lo sviluppo frontend React + MUI + TypeScript con 5 agenti specializzati, chain enforcement obbligatoria e comando /chain |
 
 ## Contribuire
 

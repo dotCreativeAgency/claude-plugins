@@ -1,25 +1,29 @@
 # Frontend Pipeline Plugin
 
-Automated frontend development pipeline for React + MUI + TypeScript projects. Provides 4 specialized agents that work together in an automated chain, plus a comprehensive MUI/React best practices skill.
+Automated frontend development pipeline for React + MUI + TypeScript projects. Provides 5 specialized agents that work together in a mandatory automated chain with enforced review cycles, a `/chain` command for explicit chain enforcement, plus a comprehensive MUI/React best practices skill.
 
 ## Pipeline Flow
 
 ```
-frontend-architect ──> frontend-reviewer ──> frontend-debugger (score < 80)
-                                         ──> frontend-refactorer (LOC > 150)
+frontend-architect ──> frontend-reviewer ──> frontend-debugger (score < 80) ──> frontend-reviewer (re-review)
+                                         ──> frontend-refactorer (LOC > 150) ──> frontend-reviewer (re-review)
                                          ──> DONE (score >= 80, LOC <= 150)
+                                                          max 2 review cycles
+
+chrome-devtools-analyzer (independent, invoked by debugger or user)
 ```
 
 ## Components
 
 ### Agents
 
-| Agent | Model | Color | Purpose |
-|-------|-------|-------|---------|
-| **frontend-architect** | opus | green | Proactive React/MUI component creation |
-| **frontend-reviewer** | opus | yellow | Code quality scoring (0-100) with auto-chaining |
-| **frontend-debugger** | sonnet | red | Chrome DevTools-integrated debugging |
-| **frontend-refactorer** | sonnet | purple | Component decomposition (150 LOC limit) |
+| Agent | Model | Color | Chain Position | Purpose |
+|-------|-------|-------|----------------|---------|
+| **frontend-architect** | opus | green | 1st (mandatory) | Proactive React/MUI component creation |
+| **frontend-reviewer** | opus | yellow | 2nd (mandatory) | Code quality scoring (0-100) with auto-chaining |
+| **frontend-debugger** | sonnet | red | 3rd (conditional) | Error resolution when score < 80 / CRITICAL/HIGH |
+| **frontend-refactorer** | sonnet | purple | 3rd (conditional) | Component decomposition (LOC > 150 / maintainability < 15) |
+| **chrome-devtools-analyzer** | sonnet | pink | Independent | Browser-level diagnostics via Chrome DevTools |
 
 ### Skills
 
@@ -29,11 +33,13 @@ frontend-architect ──> frontend-reviewer ──> frontend-debugger (score < 
 
 ## Features
 
+- **Mandatory chain enforcement**: Agents hand off to each other with enforced review cycles (max 2)
 - **Proactive activation**: Agents trigger automatically based on context (bilingual EN/IT)
-- **Automatic chaining**: Agents hand off to each other based on results
+- **`/chain` command**: Explicit chain enforcement mode - prohibits direct implementation
 - **150 LOC enforcement**: Components exceeding 150 lines are automatically flagged for decomposition
 - **Quality scoring**: 100-point system across Performance, Security, Maintainability, Accessibility
-- **Chrome DevTools integration**: Real-time browser inspection for debugging
+- **Re-review cycles**: After debugger/refactorer, reviewer is re-launched automatically (max 2 cycles)
+- **Chrome DevTools integration**: Dedicated `chrome-devtools-analyzer` agent for browser inspection
 - **WCAG 2.1 AA compliance**: Accessibility checks built into every agent
 - **Project-aware**: Agents read CLAUDE.md to adapt to project conventions
 
@@ -125,6 +131,33 @@ Triggers when files exceed 150 LOC:
 "This component is too long, simplify it"
 "Decomponi il componente InvoiceList"
 ```
+
+### Chrome DevTools Analyzer (Browser Diagnostics)
+
+Independent agent for browser-level inspection. Can be invoked by debugger or directly:
+
+```
+"Usa chrome devtools per controllare la pagina"
+"Controlla se ci sono errori nella console del frontend"
+"Verifica la performance della pagina su http://localhost:5173"
+"Ispeziona il DOM della homepage"
+```
+
+### `/chain` Command (Chain Enforcement)
+
+Explicitly activates mandatory agent chain enforcement. Prohibits direct implementation:
+
+```
+/chain Implementa UserTable, UserForm e UserDetail per il modulo utenti
+/chain Create a dashboard with tenant statistics and real-time charts
+```
+
+The chain enforces this sequence for each component:
+1. `frontend-architect` -> Creates the component
+2. `frontend-reviewer` -> Code review with score (MANDATORY)
+3. `frontend-debugger` -> If score < 80 or CRITICAL/HIGH (automatic)
+4. `frontend-refactorer` -> If LOC > 150 or maintainability < 15/25 (automatic)
+5. `frontend-reviewer` -> Re-validation (max 2 cycles)
 
 ## Project Compatibility
 
