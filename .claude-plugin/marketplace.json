@@ -19,6 +19,17 @@
       },
       "category": "development",
       "tags": ["react", "mui", "typescript", "frontend", "code-review", "accessibility"]
+    },
+    {
+      "name": "code-explainer",
+      "source": "./plugins/code-explainer",
+      "description": "Explains code with visual ASCII diagrams, everyday analogies, step-by-step walkthroughs, and common gotchas.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Rocco"
+      },
+      "category": "education",
+      "tags": ["explain", "code", "diagrams", "analogies", "teaching", "learning"]
     }
   ]
 }

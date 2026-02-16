@@ -16,7 +16,8 @@ Marketplace di plugin per Claude Code.
 
 | Plugin | Versione | Descrizione |
 |--------|----------|-------------|
-| [frontend-pipeline](./plugins/frontend-pipeline) | 1.2.0 | Pipeline automatizzata per lo sviluppo frontend React + MUI + TypeScript con 5 agenti specializzati, chain enforcement obbligatoria e comando /chain |
+| [frontend-pipeline](./plugins/frontend-pipeline) | 1.3.0 | Pipeline automatizzata per lo sviluppo frontend React + MUI + TypeScript con 5 agenti specializzati e chain enforcement basata su skill |
+| [code-explainer](./plugins/code-explainer) | 1.0.0 | Spiega il codice con diagrammi ASCII, analogie quotidiane, walkthrough passo-passo e gotcha comuni |
 
 ## Contribuire
 
