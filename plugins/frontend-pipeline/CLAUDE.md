@@ -4,12 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Claude Code plugin that provides an automated frontend development pipeline for React + MUI + TypeScript projects. The plugin consists of 5 specialized agents that work in a mandatory automated chain with enforced review cycles, a `/chain` command for explicit chain enforcement, plus a comprehensive MUI/React best practices skill.
+This is a Claude Code plugin that provides an automated frontend development pipeline for React + MUI + TypeScript projects. The plugin consists of 5 specialized agents that work in a mandatory automated chain with enforced review cycles, skill-based chain enforcement with agent skill preloading, and comprehensive MUI/React best practices skills.
 
 **Repository Structure:**
 - `/agents/` - 5 specialized agent definitions (architect, reviewer, debugger, refactorer, chrome-devtools-analyzer)
-- `/commands/` - Slash commands (`/chain` for mandatory chain enforcement)
+- `/skills/chain-enforcement/` - Mandatory agent pipeline enforcement skill
 - `/skills/mui-react-development/` - MUI v7 + React patterns skill with reference documentation
+- `/skills/page-header-generator/` - Page header standards and shared header components
 - `/.claude-plugin/plugin.json` - Plugin metadata and configuration
 
 ## Plugin Architecture
@@ -32,22 +33,23 @@ chrome-devtools-analyzer (independent, invoked by debugger or user)
 
 **Key Design Principles:**
 - **Mandatory Chain Enforcement**: Agents hand off to each other programmatically based on results with enforced review cycles (max 2 cycles)
+- **Skill-Based Chain Enforcement**: The `chain-enforcement` skill auto-triggers on frontend keywords and enforces the pipeline without needing a slash command
+- **Agent Skill Preloading**: Technical skills (`mui-react-development`, `page-header-generator`) are preloaded into agents via `skills:` frontmatter, giving them domain knowledge at startup
 - **Proactive Activation**: Agents trigger automatically based on bilingual (EN/IT) keyword detection
 - **150 LOC Enforcement**: Hard limit for component size - automatic decomposition when exceeded
 - **Quality Scoring**: 100-point system across Performance, Security, Maintainability, Accessibility
 - **Re-review Cycles**: After debugger/refactorer completes, reviewer is re-launched automatically (max 2 cycles)
-- **`/chain` Command**: Explicit chain enforcement mode that prohibits direct implementation
 - **Project-Aware**: All agents read the target project's CLAUDE.md to adapt to conventions
 
 ### Agent Specifications
 
-| Agent | Model | Color | Chain Position | Primary Responsibility |
-|-------|-------|-------|----------------|------------------------|
-| `frontend-architect` | opus | green | 1st (mandatory) | Component creation with MUI/React best practices |
-| `frontend-reviewer` | opus | yellow | 2nd (mandatory) | Quality scoring + automatic chain orchestration |
-| `frontend-debugger` | sonnet | red | 3rd (conditional) | Error resolution when score < 80 / CRITICAL/HIGH |
-| `frontend-refactorer` | sonnet | purple | 3rd (conditional) | Component decomposition when LOC > 150 / maintainability < 15 |
-| `chrome-devtools-analyzer` | sonnet | pink | Independent | Browser-level diagnostics via Chrome DevTools |
+| Agent | Model | Color | Chain Position | Preloaded Skills | Primary Responsibility |
+|-------|-------|-------|----------------|------------------|------------------------|
+| `frontend-architect` | opus | green | 1st (mandatory) | `mui-react-development`, `page-header-generator` | Component creation with MUI/React best practices |
+| `frontend-reviewer` | opus | yellow | 2nd (mandatory) | `mui-react-development`, `page-header-generator` | Quality scoring + automatic chain orchestration |
+| `frontend-debugger` | sonnet | red | 3rd (conditional) | `mui-react-development` | Error resolution when score < 80 / CRITICAL/HIGH |
+| `frontend-refactorer` | sonnet | purple | 3rd (conditional) | `mui-react-development` | Component decomposition when LOC > 150 / maintainability < 15 |
+| `chrome-devtools-analyzer` | sonnet | pink | Independent | None | Browser-level diagnostics via Chrome DevTools |
 
 **Critical Implementation Details:**
 - **Architect** (Chain Position 1st): Acts immediately on UI keywords without asking for confirmation; uses Sequential Thinking MCP server for requirements analysis; always consults MUI MCP and Context7 for API verification; MUST chain to reviewer after completion
@@ -56,13 +58,11 @@ chrome-devtools-analyzer (independent, invoked by debugger or user)
 - **Refactorer** (Chain Position 3rd, conditional): Enforces 150 LOC limit; creates feature-based decomposition; updates imports and exports; MUST trigger re-review after refactoring
 - **Chrome DevTools Analyzer** (Independent): Browser-level diagnostics via Chrome DevTools; can be invoked by debugger or directly by user; React-specific analysis (component tree, hydration errors, performance profiling)
 
-### Command: `/chain`
+### Skill: chain-enforcement
 
-Located in `/commands/chain.md`.
+Located in `/skills/chain-enforcement/SKILL.md`.
 
-**Purpose**: Activates mandatory agent chain enforcement mode. When active, it is **forbidden** to implement React code directly -- every implementation task MUST go through the agent chain.
-
-**Usage**: `/chain <implementation plan>`
+**Purpose**: Mandatory agent pipeline enforcement. Auto-triggers on React/MUI/frontend keywords and enforces the full agent chain. Replaces the former `/chain` command with a skill that activates automatically. Can also be invoked explicitly as `/chain-enforcement`.
 
 **Chain sequence**:
 1. `frontend-architect` -> Creates the component
@@ -75,7 +75,7 @@ Located in `/commands/chain.md`.
 
 Located in `/skills/mui-react-development/SKILL.md` with reference documentation in `/references/`.
 
-**Purpose**: Provides MUI v7, React 19, TanStack Query v5, React Hook Form + Zod, React Router v7 patterns.
+**Purpose**: Provides MUI v7, React 19, TanStack Query v5, React Hook Form + Zod, React Router v7 patterns. Preloaded into `frontend-architect`, `frontend-reviewer`, `frontend-debugger`, and `frontend-refactorer` agents via `skills:` frontmatter.
 
 **Critical Knowledge Areas:**
 - **MUI v7 Breaking Changes**: Grid2/Unstable_Grid2 removed, unified Grid API with `size` prop
@@ -83,6 +83,18 @@ Located in `/skills/mui-react-development/SKILL.md` with reference documentation
 - **Path Aliases**: Always use @/ aliases as defined in target project's tsconfig
 - **150 LOC Rule**: Components exceeding 150 lines trigger automatic decomposition
 - **WCAG 2.1 AA Compliance**: aria-labels, keyboard navigation, focus management required
+
+### Skill: page-header-generator
+
+Located in `/skills/page-header-generator/SKILL.md`.
+
+**Purpose**: Page header standards and shared header components for page creation. Preloaded into `frontend-architect` and `frontend-reviewer` agents via `skills:` frontmatter.
+
+**Key Features:**
+- Shared header components (`IndexPageHeader`, `ShowPageHeader`, `EditPageHeader`)
+- Theme-driven design system (colors derived from application theme, not hardcoded)
+- Page structure standards for Index, Show, Create, Edit page types
+- Loading and error state patterns
 
 ## Modifying the Plugin
 
