@@ -2,6 +2,14 @@
 
 Advanced patterns for TanStack Query v5, React Hook Form + Zod, React Router v7, and state management.
 
+## Table of Contents
+
+- [TanStack Query v5](#tanstack-query-v5) — Query patterns, mutations, optimistic updates, prefetching, key conventions
+- [React Hook Form + Zod](#react-hook-form--zod) — Schema patterns, conditional validation, nested objects, MUI integration, useFieldArray
+- [React Router v7](#react-router-v7) — Route configuration, protected routes, navigation, breadcrumbs
+- [State Management Strategy](#state-management-strategy) — Decision matrix, key principles
+- [Performance Patterns](#performance-patterns) — Memoization (React 19 note), lazy loading, error boundaries
+
 ## TanStack Query v5
 
 ### Query Patterns
