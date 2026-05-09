@@ -1,6 +1,6 @@
 # Frontend Pipeline Plugin
 
-Automated frontend development pipeline for React + MUI + TypeScript projects. Provides 5 specialized agents that work together in a mandatory automated chain with enforced review cycles, a `/chain` command for explicit chain enforcement, plus a comprehensive MUI/React best practices skill.
+Automated frontend development pipeline for React + MUI + TypeScript projects. Provides 5 specialized agents that work together in a mandatory automated chain with enforced review cycles, a `chain-enforcement` skill that auto-activates on frontend keywords, plus comprehensive MUI/React best practices skills.
 
 ## Pipeline Flow
 
@@ -23,7 +23,7 @@ chrome-devtools-analyzer (independent, invoked by debugger or user)
 | **frontend-reviewer** | opus | yellow | 2nd (mandatory) | Code quality scoring (0-100) with auto-chaining |
 | **frontend-debugger** | sonnet | red | 3rd (conditional) | Error resolution when score < 80 / CRITICAL/HIGH |
 | **frontend-refactorer** | sonnet | purple | 3rd (conditional) | Component decomposition (LOC > 150 / maintainability < 15) |
-| **chrome-devtools-analyzer** | sonnet | pink | Independent | Browser-level diagnostics via Chrome DevTools |
+| **chrome-devtools-analyzer** | haiku | pink | Independent | Browser-level diagnostics via Chrome DevTools |
 
 ### Skills
 
@@ -35,7 +35,7 @@ chrome-devtools-analyzer (independent, invoked by debugger or user)
 
 - **Mandatory chain enforcement**: Agents hand off to each other with enforced review cycles (max 2)
 - **Proactive activation**: Agents trigger automatically based on context (bilingual EN/IT)
-- **`/chain` command**: Explicit chain enforcement mode - prohibits direct implementation
+- **`chain-enforcement` skill**: Auto-activates on frontend keywords; prohibits direct implementation. Can also be invoked explicitly via `/chain-enforcement`.
 - **150 LOC enforcement**: Components exceeding 150 lines are automatically flagged for decomposition
 - **Quality scoring**: 100-point system across Performance, Security, Maintainability, Accessibility
 - **Re-review cycles**: After debugger/refactorer, reviewer is re-launched automatically (max 2 cycles)
@@ -143,13 +143,13 @@ Independent agent for browser-level inspection. Can be invoked by debugger or di
 "Ispeziona il DOM della homepage"
 ```
 
-### `/chain` Command (Chain Enforcement)
+### `chain-enforcement` Skill
 
-Explicitly activates mandatory agent chain enforcement. Prohibits direct implementation:
+Auto-activates on frontend keywords (component, form, page, dashboard, etc.) and enforces the mandatory agent chain. Can also be invoked explicitly:
 
 ```
-/chain Implementa UserTable, UserForm e UserDetail per il modulo utenti
-/chain Create a dashboard with tenant statistics and real-time charts
+/chain-enforcement Implementa UserTable, UserForm e UserDetail per il modulo utenti
+/chain-enforcement Create a dashboard with tenant statistics and real-time charts
 ```
 
 The chain enforces this sequence for each component:

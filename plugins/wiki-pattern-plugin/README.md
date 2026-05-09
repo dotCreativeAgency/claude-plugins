@@ -37,8 +37,8 @@ Le 3 skill operative leggono il `CLAUDE.md` della wiki corrente per capire domin
 Da dentro Claude Code:
 
 ```
-/plugin marketplace add dotCreativeAgency/wiki-pattern-plugin
-/plugin install wiki-pattern-plugin@wiki-pattern
+/plugin marketplace add dotCreativeAgency/claude-plugins
+/plugin install wiki-pattern-plugin@dotcreativeagency-plugins
 ```
 
 Riapri Claude Code se non vedi i 5 comandi (`/wiki-bootstrap`, `/wiki-upgrade`, `/wiki-ingest`, `/wiki-query`, `/wiki-lint`).
@@ -46,8 +46,8 @@ Riapri Claude Code se non vedi i 5 comandi (`/wiki-bootstrap`, `/wiki-upgrade`, 
 ### Manuale (clone + symlink)
 
 ```bash
-git clone https://github.com/dotCreativeAgency/wiki-pattern-plugin
-cd wiki-pattern-plugin
+git clone https://github.com/dotCreativeAgency/claude-plugins
+cd claude-plugins/plugins/wiki-pattern-plugin
 
 # Installa tutte le 5 skill globalmente
 for s in wiki-bootstrap wiki-upgrade wiki-ingest wiki-query wiki-lint; do
@@ -60,8 +60,8 @@ done
 Oppure registra il plugin localmente come marketplace:
 
 ```
-/plugin marketplace add /path/to/wiki-pattern-plugin
-/plugin install wiki-pattern-plugin@wiki-pattern
+/plugin marketplace add /path/to/claude-plugins
+/plugin install wiki-pattern-plugin@dotcreativeagency-plugins
 ```
 
 ## Uso
@@ -138,8 +138,7 @@ Oppure con parametri:
 ```
 wiki-pattern-plugin/
 ├── .claude-plugin/
-│   ├── plugin.json              ← manifest (5 skill)
-│   └── marketplace.json         ← manifest marketplace
+│   └── plugin.json              ← manifest (5 skill)
 ├── skills/
 │   ├── wiki-bootstrap/SKILL.md  ← meta: crea nuova wiki
 │   ├── wiki-upgrade/SKILL.md    ← meta: migra wiki esistente

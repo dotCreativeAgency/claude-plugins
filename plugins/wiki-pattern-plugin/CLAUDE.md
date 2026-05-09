@@ -30,15 +30,15 @@ Il pattern è documentato nelle skill di questo plugin. In sintesi:
 Da Claude Code:
 
 ```
-/plugin marketplace add dotCreativeAgency/wiki-pattern-plugin
-/plugin install wiki-pattern-plugin@wiki-pattern
+/plugin marketplace add dotCreativeAgency/claude-plugins
+/plugin install wiki-pattern-plugin@dotcreativeagency-plugins
 ```
 
 Oppure registra il marketplace localmente puntando a questo repo:
 
 ```
-/plugin marketplace add /path/to/wiki-pattern-plugin
-/plugin install wiki-pattern-plugin@wiki-pattern
+/plugin marketplace add /path/to/claude-plugins
+/plugin install wiki-pattern-plugin@dotcreativeagency-plugins
 ```
 
 ## Lingua e convenzioni

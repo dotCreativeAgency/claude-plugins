@@ -49,7 +49,7 @@ chrome-devtools-analyzer (independent, invoked by debugger or user)
 | `frontend-reviewer` | opus | yellow | 2nd (mandatory) | `mui-react-development`, `page-header-generator` | Quality scoring + automatic chain orchestration |
 | `frontend-debugger` | sonnet | red | 3rd (conditional) | `mui-react-development` | Error resolution when score < 80 / CRITICAL/HIGH |
 | `frontend-refactorer` | sonnet | purple | 3rd (conditional) | `mui-react-development` | Component decomposition when LOC > 150 / maintainability < 15 |
-| `chrome-devtools-analyzer` | sonnet | pink | Independent | None | Browser-level diagnostics via Chrome DevTools |
+| `chrome-devtools-analyzer` | haiku | pink | Independent | None | Browser-level diagnostics via Chrome DevTools |
 
 **Critical Implementation Details:**
 - **Architect** (Chain Position 1st): Acts immediately on UI keywords without asking for confirmation; uses Sequential Thinking MCP server for requirements analysis; always consults MUI MCP and Context7 for API verification; MUST chain to reviewer after completion

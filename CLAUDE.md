@@ -108,8 +108,8 @@ Each plugin directory must contain `.claude-plugin/plugin.json`:
 
 4. **Create plugin components:**
    - Add agents in `agents/*.md` with YAML frontmatter
-   - Add skills in `skills/{skill-name}/SKILL.md`
-   - Add commands in `commands/*.md`
+   - Add skills in `skills/{skill-name}/SKILL.md` (preferred for both knowledge skills AND user-invoked slash commands)
+   - Add commands in `commands/*.md` (legacy — prefer skills/ for new plugins)
    - Add hooks in `hooks/*.md`
 
 5. **Document the plugin:**
@@ -166,7 +166,11 @@ Agents are autonomous subprocesses triggered by keywords or manually invoked.
 name: agent-name
 description: "Triggering conditions with examples..."
 model: opus | sonnet | haiku
-color: green | yellow | red | purple | blue
+color: green | yellow | red | purple | blue | pink
+skills:                                   # optional: preload skills at agent startup
+  - skill-name                            # local to this plugin
+  - other-plugin:skill-name               # cross-plugin reference (must exist in marketplace)
+tools: Read, Grep, ...                    # optional explicit allowlist
 ---
 
 # System prompt content
@@ -178,6 +182,8 @@ color: green | yellow | red | purple | blue
 - Document auto-chaining logic if agent calls other agents
 - Specify MCP server dependencies
 - Use clear section headers for instructions
+- Keep `skills:` references valid: any entry MUST resolve to a skill present in this plugin or in another plugin registered in `marketplace.json` — dangling references silently fail at load time
+- Keep `tools:` allowlist minimal — wide allowlists (Redis, Memory, etc.) reduce portability and break in environments without those MCP servers
 
 ### Skills (`skills/{skill-name}/SKILL.md`)
 
@@ -199,7 +205,9 @@ description: "When to activate this skill..."
 - Provide CORRECT/WRONG code examples
 - Document critical rules prominently
 
-### Commands (`commands/*.md`)
+### Commands (`commands/*.md`) — legacy
+
+> **Note:** The `commands/` directory is a legacy format. For new plugins, prefer creating user-invoked slash commands as skills in `skills/{skill-name}/SKILL.md` — both are loaded identically. Use `commands/` only when maintaining a plugin that already uses this layout.
 
 Slash commands triggered with `/command-name`.
 
