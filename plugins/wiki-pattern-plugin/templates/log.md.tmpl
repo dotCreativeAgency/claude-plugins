@@ -1,0 +1,22 @@
+# Log — Wiki {{DOMAIN}}
+
+> Log cronologico append-only. Ogni voce inizia con `## [YYYY-MM-DD] operazione | descrizione`.
+> Non modificare le voci esistenti — solo aggiungere in coda.
+
+```bash
+# Comandi utili
+grep "^## \[" log.md | tail -10          # ultime 10 operazioni
+grep "ingest" log.md | wc -l             # totale fonti ingested
+grep "query" log.md | wc -l              # totale query effettuate
+```
+
+---
+
+## [{{TODAY}}] setup | Inizializzazione wiki {{DOMAIN}}
+
+- Struttura cartelle creata via `/wiki-bootstrap`
+- `CLAUDE.md` configurato per dominio: {{DOMAIN}}
+- Tassonomia: {{TYPE}}, Lingua: {{LANG}}
+- Feature: archive-pages={{ARCHIVE_PAGES}}, provenance={{PROVENANCE}}, cross-linker={{CROSS_LINKER}}
+- Skill operative installate: wiki-ingest, wiki-query, wiki-lint
+- Wiki pronta per il primo ingest

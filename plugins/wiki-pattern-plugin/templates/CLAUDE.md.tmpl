@@ -1,0 +1,288 @@
+# CLAUDE.md — Schema della Wiki {{DOMAIN}}
+
+## Scopo
+
+Wiki tecnica persistente su **{{DOMAIN}}**.
+Mono-dominio ora, struttura predisposta per generalizzare. Compila e sintetizza le fonti una sola
+volta; le query attingono alla conoscenza già integrata.
+
+> Questo file definisce **schema, convenzioni e tipi**. Le **procedure operative** (ingest, query, lint) vivono nelle skill del plugin globale `wiki-pattern-plugin`, invocabili come slash command (`/wiki-ingest`, `/wiki-query`, `/wiki-lint`).
+
+---
+
+## Struttura cartelle
+
+```
+{{DOMAIN}}/
+├── CLAUDE.md                           ← schema (questo file)
+├── index.md                            ← catalogo (categorie + colonna Updated)
+├── log.md                              ← log append-only
+├── raw/                                ← fonti immutabili — LLM solo legge
+│   └── assets/
+├── inbox/                              ← appunti effimeri — processati e rimossi dopo ingest
+├── wiki/                               ← LLM-owned
+│   ├── _meta/
+│   │   └── tags.md                     ← registro tag auto-aggiornante
+<!-- IF type=tech -->
+│   ├── {{DOMAIN_DIR}}/                 ← funzionalità/sottosistemi {{DOMAIN}}
+│   ├── packages/                       ← package ecosistema
+│   ├── concepts/                       ← concetti trasversali
+│   ├── integrations/                   ← {{DOMAIN}} ↔ altri sistemi
+│   ├── comparisons/                    ← confronti A vs B
+<!-- END type=tech -->
+<!-- IF type=generic -->
+│   ├── concepts/                       ← idee, pattern, modelli mentali
+│   ├── entities/                       ← cose concrete: tool, persone, servizi
+│   ├── references/                     ← lookup fattuali: API, config, spec
+<!-- END type=generic -->
+│   └── src-*.md                        ← pagine source (frontmatter raw_source + hash)
+└── (le skill operative vengono dal plugin globale `wiki-pattern-plugin`, non sono duplicate qui)
+```
+
+### Le tre top-level dir, regole nette
+
+| Dir | Mutabilità | Chi scrive | Cosa contiene |
+|---|---|---|---|
+| `raw/` | **Immutabile** — mai modificata, mai cancellata | Tu (l'utente) | Fonti autorevoli permanenti |
+| `inbox/` | **Effimera** — processata e poi cancellata dall'LLM | Tu | Appunti volanti, paste, note rapide |
+| `wiki/` | **LLM-owned** — l'LLM crea/aggiorna/elimina | LLM | Pagine compilate |
+
+---
+
+## Tipi di pagina
+
+<!-- IF type=tech -->
+| Tipo | Cartella | Descrizione |
+|---|---|---|
+| `feature` | `wiki/{{DOMAIN_DIR}}/` | Funzionalità/sottosistema {{DOMAIN}} |
+| `package` | `wiki/packages/` | Package/librerie dell'ecosistema |
+| `concept` | `wiki/concepts/` | Concetti trasversali |
+| `integration` | `wiki/integrations/` | {{DOMAIN}} con altri sistemi |
+| `comparison` | `wiki/comparisons/` | Confronto A vs B |
+| `source` | `wiki/src-*.md` | Sommario di una fonte ingerita (prefisso `src-`) |
+<!-- END type=tech -->
+<!-- IF type=generic -->
+| Tipo | Cartella | Descrizione |
+|---|---|---|
+| `concept` | `wiki/concepts/` | Idee, pattern, modelli mentali |
+| `entity` | `wiki/entities/` | Cose concrete: tool, persone, servizi |
+| `reference` | `wiki/references/` | Lookup fattuali: API, config, spec |
+| `source` | `wiki/src-*.md` | Sommario di una fonte ingerita (prefisso `src-`) |
+<!-- END type=generic -->
+
+<!-- IF archive-pages -->
+Una pagina di qualsiasi tipo può avere il flag **`archive: true`** se è una sintesi nata da una QUERY (non da un'ingest). Vedi sezione Archive Pages.
+<!-- END archive-pages -->
+
+---
+
+## Frontmatter
+
+### Pagine normali (qualsiasi tipo eccetto `source`)
+
+```yaml
+---
+title: "Nome Pagina"
+type: <uno dei tipi sopra>
+tags: [tag1, tag2, tag3]                  # max 5, vedi wiki/_meta/tags.md
+aliases: ["Nome Alternativo", "Sigla"]    # opzionale, usato dal cross-linker
+sources: [src-slug-fonte]                 # pagine src-* che alimentano questa pagina
+updated: {{TODAY}}
+<!-- IF archive-pages -->
+archive: false                            # opzionale, default false
+# Solo se archive: true:
+archived_at: YYYY-MM-DD
+archived_from_query: "Domanda originale"
+<!-- END archive-pages -->
+---
+```
+
+### Pagine source (`src-*.md`)
+
+```yaml
+---
+title: "Titolo Fonte"
+type: source
+sources: []                                # vuoto: la fonte è raw_source
+tags: [tag1, tag2]
+updated: {{TODAY}}
+raw_source: raw/path/to/file.md
+raw_source_hash: <sha1 del file raw>
+---
+```
+
+`raw_source_hash` è lo SHA-1 del file raw. Permette il rilevamento automatico di modifiche → ri-ingest.
+
+---
+
+## Convenzioni di naming
+
+<!-- IF type=tech -->
+| Tipo | Pattern | Esempio |
+|---|---|---|
+| Feature | `wiki/{{DOMAIN_DIR}}/[kebab-case].md` | `wiki/{{DOMAIN_DIR}}/example-feature.md` |
+| Package | `wiki/packages/[vendor-package].md` | `wiki/packages/vendor-name.md` |
+| Concept | `wiki/concepts/[kebab-case].md` | `wiki/concepts/some-concept.md` |
+| Integration | `wiki/integrations/[kebab-case].md` | `wiki/integrations/another-system.md` |
+| Comparison | `wiki/comparisons/[a]-vs-[b].md` | `wiki/comparisons/x-vs-y.md` |
+| Source | `wiki/src-[slug].md` | `wiki/src-official-docs.md` |
+<!-- END type=tech -->
+<!-- IF type=generic -->
+| Tipo | Pattern | Esempio |
+|---|---|---|
+| Concept | `wiki/concepts/[kebab-case].md` | `wiki/concepts/some-pattern.md` |
+| Entity | `wiki/entities/[kebab-case].md` | `wiki/entities/some-tool.md` |
+| Reference | `wiki/references/[kebab-case].md` | `wiki/references/api-spec.md` |
+| Source | `wiki/src-[slug].md` | `wiki/src-paper-title.md` |
+<!-- END type=generic -->
+
+Sempre kebab-case, mai spazi/underscore. Nomi descrittivi e specifici.
+
+---
+
+## Link interni
+
+Sintassi Obsidian `[[nome-file]]` (senza `.md`). Aggiungi sempre testo descrittivo della relazione:
+
+```markdown
+Vedi [[some-concept]] per approfondire.
+```
+
+Link esterni: markdown standard.
+
+<!-- IF provenance -->
+---
+
+## Provenance — markers `^[inferred]`
+
+Default: tutte le frasi sono **estratte** dalla fonte (nessun marker).
+
+Quando l'LLM aggiunge sintesi/inferenza non presente in fonte, marca esplicitamente:
+
+```markdown
+Questa affermazione ^[inferred: motivo per cui non è in fonte] è sintesi LLM.
+```
+
+Quando le fonti sono in disaccordo:
+
+```markdown
+Il valore di X è 30s ^[ambiguous: docs dice 30s, blog ufficiale 60s].
+```
+
+Pagine con alta % di `^[inferred]` vengono segnalate dal lint (drift verso speculazione).
+<!-- END provenance -->
+
+<!-- IF provenance-strict -->
+### Blocco statistico in frontmatter (modalità strict)
+
+```yaml
+provenance:
+  extracted: 80     # % di paragrafi estratti dalla fonte
+  inferred: 15      # % di paragrafi marcati ^[inferred]
+  ambiguous: 5      # % di paragrafi marcati ^[ambiguous]
+```
+<!-- END provenance-strict -->
+
+---
+
+## Conflict annotation tra fonti
+
+Quando una nuova fonte contraddice contenuto esistente, **non sostituire silenziosamente**. Aggiungi blocco di conflitto nella pagina:
+
+```markdown
+> ⚠️ **Conflitto fonti**
+> - [[src-fonte-vecchia]] (data): "claim vecchio"
+> - [[src-fonte-nuova]] (data): "claim nuovo"
+>
+> Versione corrente: **claim scelto**.
+```
+
+Se le pagine in conflitto sono diverse, segnalalo in entrambe e cross-linkale.
+
+<!-- IF archive-pages -->
+---
+
+## Archive pages
+
+Pagine nate da una QUERY (sintesi di pagine wiki esistenti, non compilazione di una raw):
+
+- Frontmatter: `archive: true` + `archived_at` + `archived_from_query`
+- Campo `sources`: punta a pagine wiki citate (non a `src-*`)
+- `index.md` mostra prefisso `[Archived]` nella descrizione
+- **Immune al cascade**: future ingest non aggiornano queste pagine
+- Mantengono il `type` semantico; `archive` è un flag indipendente
+<!-- END archive-pages -->
+
+---
+
+## Tag taxonomy
+
+Registro vocabolario in `wiki/_meta/tags.md`, auto-aggiornato dalla skill `wiki-ingest`.
+
+- Ogni tag nuovo viene auto-aggiunto al registro con descrizione di una riga
+- Massimo consigliato: **5 tag per pagina**
+- `wiki-lint` segnala:
+  - duplicati semantici
+  - tag orfani (≤2 pagine)
+  - tag fuori registro
+
+---
+
+## index.md
+
+Organizzato per categoria. Una riga per pagina con `Updated` e descrizione breve:
+
+```markdown
+## Categoria
+- [[slug-pagina]] (YYYY-MM-DD) — descrizione una riga
+- [[altra-pagina]] (YYYY-MM-DD) — [Archived] descrizione (se archive)
+```
+
+L'`Updated` riflette quando il **contenuto di conoscenza** è cambiato (non il filesystem mtime).
+
+---
+
+## log.md
+
+Append-only. Ogni voce inizia con header di livello 2:
+
+```
+## [YYYY-MM-DD] operazione | Descrizione breve
+- Updated: <pagina cascade-aggiornata>
+```
+
+Operazioni: `setup`, `ingest`, `query`, `lint`, `archive`, `inbox-process`, `refactor`.
+
+---
+
+## Operazioni (skill)
+
+Le procedure complete sono nelle skill — invocabili come slash command:
+
+| Comando | Skill | Cosa fa |
+|---|---|---|
+| `/wiki-ingest [fonte]` | `wiki-ingest` | Compila pagine da raw/ o inbox/. Senza argomenti: processa prima inbox/, poi pendenti raw/ |
+| `/wiki-query <domanda>` | `wiki-query` | Risponde da wiki<!-- IF archive-pages -->. Su richiesta esplicita salva la risposta come archive page<!-- END archive-pages --> |
+| `/wiki-lint` | `wiki-lint` | Auto-fix deterministico + report euristico |
+
+Apri la skill corrispondente per vedere la procedura completa.
+
+---
+
+## Lingua
+
+- Testo discorsivo: **{{LANG}}**
+- Codice, identificatori, nomi di comandi/file: **inglese** (cita gli originali)
+
+---
+
+## Regole generali (TL;DR)
+
+1. `raw/` immutabile, `inbox/` effimera, `wiki/` LLM-owned
+2. Sempre aggiornare `index.md`, `log.md` e `wiki/_meta/tags.md` dopo ogni operazione significativa
+3. Sintesi > copia: estrai essenziale + esempi pratici
+4. Conflict annotation esplicita quando le fonti divergono
+<!-- IF provenance -->5. Provenance markers `^[inferred]` per ogni claim non da fonte
+<!-- END provenance -->6. Cross-reference generosi<!-- IF cross-linker-auto --> (il cross-linker dell'ingest aiuta)<!-- END cross-linker-auto -->
+7. Tag dal registro; nuovi tag auto-aggiunti
+8. Frontmatter sempre presente e completo
