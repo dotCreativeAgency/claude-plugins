@@ -254,6 +254,8 @@ The marketplace uses HTTPS URLs (not SSH) for Git operations to ensure broad com
 
 | Plugin | Version | Description |
 |--------|---------|-------------|
-| [frontend-pipeline](./plugins/frontend-pipeline) | 1.0.0 | Automated frontend development pipeline with 4 agents (architect, reviewer, debugger, refactorer) for React + MUI + TypeScript projects |
+| [frontend-pipeline](./plugins/frontend-pipeline) | 1.3.1 | Automated frontend development pipeline with 5 agents (architect, reviewer, debugger, refactorer, chrome-devtools-analyzer) and skill-based chain enforcement for React + MUI + TypeScript projects |
+| [code-explainer](./plugins/code-explainer) | 1.0.0 | Explains code with ASCII diagrams, everyday analogies, step-by-step walkthroughs, and common gotchas |
+| [wiki-pattern-plugin](./plugins/wiki-pattern-plugin) | 0.2.1 | Builds and maintains LLM-curated technical wikis using Karpathy's LLM Wiki pattern with 11 extensions. Exposes 5 skills: wiki-bootstrap, wiki-upgrade, wiki-ingest, wiki-query, wiki-lint |
 
 Each plugin has its own CLAUDE.md with plugin-specific development guidance.
