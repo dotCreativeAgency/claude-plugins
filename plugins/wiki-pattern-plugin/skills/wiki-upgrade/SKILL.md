@@ -53,6 +53,7 @@ Verifica presenza di:
 - Sezione "Conflict annotation"
 - Sezione "Archive pages"
 - Sezione "Provenance markers"
+- Sezione "Modulo stato" + dir `wiki/stato/` con `todo.md` e `bug-aperti.md`
 
 ### 2d — Pagine wiki esistenti
 
@@ -125,6 +126,20 @@ Verifica che non esista già (anche con nome diverso).
 *.local.md
 ```
 
+### M5a — Crea wiki/stato/ se richiesto
+
+Se l'utente ha confermato di abilitare il modulo `stato_pages` (chiedi se non rilevato dal CLAUDE.md):
+
+```bash
+mkdir -p <WIKI_ROOT>/wiki/stato
+```
+
+Crea `<WIKI_ROOT>/wiki/stato/todo.md` e `<WIKI_ROOT>/wiki/stato/bug-aperti.md` con frontmatter (`next_id: 1`, `data_aggiornamento: {{TODAY}}`) e corpo placeholder ("_Nessun TODO/bug aperto._"). Vedi `wiki-bootstrap` per il template esatto.
+
+Se i file già esistono: skip silenzioso.
+
+In CLAUDE.md, appendi la sezione "Modulo stato" del template. **Verifica prima che non esista già** (anche con titolo diverso ma contenuto equivalente): se è già presente, skip silenzioso — non duplicare. Il template `${CLAUDE_PLUGIN_ROOT}/templates/CLAUDE.md.tmpl` contiene **tre** blocchi `<!-- IF stato-pages -->`: appendere SOLO il blocco con heading `## Modulo stato` (l'unico che è una sezione vera e propria). Gli altri due blocchi sono frammenti contestuali (riga di tree e riga di tabella Operazioni) che non vanno appesi a EOF — se vuoi integrarli devi inserirli dentro la struttura esistente del CLAUDE.md della wiki, altrimenti ometti (M5a non rifà tree/tabella, è "solo append").
+
 ### M5 — Cleanup skill inline obsolete
 
 Per ogni `.claude/skills/wiki-{ingest,query,lint}/` presente:
@@ -185,7 +200,7 @@ Se `index.md` non è nel formato "categorie + colonna Updated":
 ⏭️ Saltati (W): <lista>
 
 ⚙️ Skill ora disponibili (dal plugin globale):
-   /wiki-ingest  /wiki-query  /wiki-lint
+   /wiki-ingest  /wiki-query  /wiki-lint  /wiki-briefing (se stato_pages attivo)
 
 📌 Prossimi passi consigliati:
    1. /wiki-lint — verifica coerenza post-upgrade

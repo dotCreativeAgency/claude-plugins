@@ -1,7 +1,7 @@
 {
   "name": "wiki-pattern-plugin",
-  "description": "Plugin Claude Code per costruire e mantenere wiki tecniche LLM-mantenute. Implementa il pattern LLM Wiki di Karpathy con 11 estensioni (cascade, conflict annotation, archive pages, cross-linker, lint split, provenance markers, registro tag). Espone 5 skill: wiki-bootstrap (crea nuova), wiki-upgrade (migra esistente), wiki-ingest/wiki-query/wiki-lint (operative su qualsiasi wiki conforme).",
-  "version": "0.2.1",
+  "description": "Plugin Claude Code per costruire e mantenere wiki tecniche LLM-mantenute. Implementa il pattern LLM Wiki di Karpathy con 12 estensioni (cascade, conflict annotation, archive pages, cross-linker, lint split, provenance markers, registro tag, modulo stato con TODO/bug e briefing operativo). Espone 6 skill: wiki-bootstrap (crea nuova), wiki-upgrade (migra esistente), wiki-ingest/wiki-query/wiki-lint (operative), wiki-briefing (briefing TODO/bug/fatto recente attivabile con saluti naturali tipo 'buongiorno wiki').",
+  "version": "0.3.2",
   "author": {
     "name": "dotCreativeAgency"
   },

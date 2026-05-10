@@ -23,6 +23,11 @@ volta; le query attingono alla conoscenza già integrata.
 ├── wiki/                               ← LLM-owned
 │   ├── _meta/
 │   │   └── tags.md                     ← registro tag auto-aggiornante
+<!-- IF stato-pages -->
+│   ├── stato/                          ← stato corrente: TODO e bug aperti (auto-aggiornati ad ogni ingest)
+│   │   ├── todo.md
+│   │   └── bug-aperti.md
+<!-- END stato-pages -->
 <!-- IF type=tech -->
 │   ├── {{DOMAIN_DIR}}/                 ← funzionalità/sottosistemi {{DOMAIN}}
 │   ├── packages/                       ← package ecosistema
@@ -264,6 +269,8 @@ Le procedure complete sono nelle skill — invocabili come slash command:
 | `/wiki-ingest [fonte]` | `wiki-ingest` | Compila pagine da raw/ o inbox/. Senza argomenti: processa prima inbox/, poi pendenti raw/ |
 | `/wiki-query <domanda>` | `wiki-query` | Risponde da wiki<!-- IF archive-pages -->. Su richiesta esplicita salva la risposta come archive page<!-- END archive-pages --> |
 | `/wiki-lint` | `wiki-lint` | Auto-fix deterministico + report euristico |
+<!-- IF stato-pages -->| `/wiki-briefing [Ng]` | `wiki-briefing` | Briefing operativo: fatto recente + bug aperti + TODO. Si attiva anche con saluti naturali (`buongiorno wiki`, `ciao wiki`, ...) |
+<!-- END stato-pages -->
 
 Apri la skill corrispondente per vedere la procedura completa.
 
@@ -286,3 +293,50 @@ Apri la skill corrispondente per vedere la procedura completa.
 <!-- END provenance -->6. Cross-reference generosi<!-- IF cross-linker-auto --> (il cross-linker dell'ingest aiuta)<!-- END cross-linker-auto -->
 7. Tag dal registro; nuovi tag auto-aggiunti
 8. Frontmatter sempre presente e completo
+<!-- IF stato-pages -->
+---
+
+## Modulo stato — TODO e bug aperti
+
+Le note in `raw/` e `inbox/` possono contenere due sezioni opzionali, lette dall'ingest e riversate in `wiki/stato/`:
+
+```markdown
+## TODO emersi
+- [P1] [auth] Migrare login a OAuth2 — Owner: tuo-nome — Stima: M
+  Note: dipende da rotazione chiavi
+
+## Bug aperti emersi
+- [P0] [auth] Login lento >5s su tenant XL — Owner: tuo-nome — Stima: M
+  Sintomo: timeout su GET /me dopo OAuth
+  Note: probabile N+1
+```
+
+**Sintassi riga**: `- [<priorità P0|P1|P2>] [<modulo>] <titolo> — Owner: <owner> — Stima: <S|M|L>`. Le righe successive indentate sono campi opzionali (`Sintomo:`, `Note:`).
+
+L'ingest assegna ID stabili (`TODO-001`, `BUG-001`, ...) e li scrive come blocchi strutturati in `wiki/stato/todo.md` e `wiki/stato/bug-aperti.md`.
+
+### Chiusura e aggiornamento
+
+Nel frontmatter di una nota raw/inbox puoi dichiarare:
+
+```yaml
+chiude_todo: [TODO-042, TODO-043]
+chiude_bug: [BUG-017]
+aggiorna_todo:
+  - id: TODO-040
+    priorita: P0
+    note: "escalato dopo incidente prod"
+aggiorna_bug:
+  - id: BUG-015
+    owner: maria
+```
+
+L'ingest rimuove le voci chiuse e aggiorna quelle indicate. La chiusura viene loggata in `log.md`.
+
+### Briefing — saluto-comando
+
+Invoca `/wiki-briefing` (o digita `buongiorno wiki`, `ciao wiki`, `cosa abbiamo fatto?`, `cosa è rimasto in sospeso?`) per ricevere un briefing che mostra:
+- Cose fatte negli ultimi 7 giorni (da `log.md`)
+- Tutti i bug aperti, ordinati per priorità
+- TODO P0 e P1 (P2 collassati in count)
+<!-- END stato-pages -->

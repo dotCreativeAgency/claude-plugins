@@ -1,8 +1,8 @@
 # wiki-pattern-plugin
 
-Plugin Claude Code per **costruire e mantenere wiki tecniche LLM-mantenute**, basato sul pattern LLM Wiki di Karpathy con 11 estensioni.
+Plugin Claude Code per **costruire e mantenere wiki tecniche LLM-mantenute**, basato sul pattern LLM Wiki di Karpathy con 12 estensioni.
 
-5 skill in totale — 2 meta (bootstrap/upgrade) + 3 operative (ingest/query/lint) — installate **una sola volta** globalmente, funzionanti in qualsiasi wiki che segue il pattern.
+6 skill in totale — 2 meta (bootstrap/upgrade) + 4 operative (ingest/query/lint/briefing) — installate **una sola volta** globalmente, funzionanti in qualsiasi wiki che segue il pattern.
 
 ## Cos'è il pattern
 
@@ -17,8 +17,9 @@ Ispirato a [karpathy/llm-wiki](https://gist.github.com/karpathy/442a6bf555914893
 - **Cross-linker post-ingest**: wikilinks auto-aggiunti su match univoci
 - **Lint split**: deterministico (auto-fix) + euristico (report)
 - **Registro tag leggero**: `wiki/_meta/tags.md` auto-aggiornante
+- **Modulo stato (opzionale)**: `wiki/stato/todo.md` + `wiki/stato/bug-aperti.md` auto-aggiornati ad ogni ingest da sezioni `## TODO emersi` / `## Bug aperti emersi` nelle note raw/inbox; chiusura via frontmatter `chiude_todo` / `chiude_bug`; briefing operativo via `/wiki-briefing` o saluti naturali
 
-## Le 5 skill
+## Le 6 skill
 
 | Skill | Scopo | Quando si attiva |
 |---|---|---|
@@ -27,8 +28,9 @@ Ispirato a [karpathy/llm-wiki](https://gist.github.com/karpathy/442a6bf555914893
 | `/wiki-ingest` | Compila una fonte raw/ o inbox/ in pagine wiki | Dopo aver droppato fonti |
 | `/wiki-query` | Risponde a una domanda dalla wiki, opzionale archive | Per consultare la conoscenza accumulata |
 | `/wiki-lint` | Health-check con auto-fix + report euristico | Periodicamente, dopo ingest in batch |
+| `/wiki-briefing` | Briefing operativo: fatto recente + bug aperti + TODO. Anche con saluti naturali (`buongiorno wiki`) | A inizio sessione, quando vuoi capire dove sei |
 
-Le 3 skill operative leggono il `CLAUDE.md` della wiki corrente per capire dominio, tassonomia e feature flags. Funzionano su qualsiasi wiki conforme al pattern senza necessità di duplicare i file SKILL nelle singole wiki.
+Le 4 skill operative leggono il `CLAUDE.md` della wiki corrente per capire dominio, tassonomia e feature flags. Funzionano su qualsiasi wiki conforme al pattern senza necessità di duplicare i file SKILL nelle singole wiki.
 
 ## Installazione
 
@@ -41,7 +43,7 @@ Da dentro Claude Code:
 /plugin install wiki-pattern-plugin@dotcreativeagency-plugins
 ```
 
-Riapri Claude Code se non vedi i 5 comandi (`/wiki-bootstrap`, `/wiki-upgrade`, `/wiki-ingest`, `/wiki-query`, `/wiki-lint`).
+Riapri Claude Code se non vedi i 6 comandi (`/wiki-bootstrap`, `/wiki-upgrade`, `/wiki-ingest`, `/wiki-query`, `/wiki-lint`, `/wiki-briefing`).
 
 ### Manuale (clone + symlink)
 
@@ -49,8 +51,8 @@ Riapri Claude Code se non vedi i 5 comandi (`/wiki-bootstrap`, `/wiki-upgrade`, 
 git clone https://github.com/dotCreativeAgency/claude-plugins
 cd claude-plugins/plugins/wiki-pattern-plugin
 
-# Installa tutte le 5 skill globalmente
-for s in wiki-bootstrap wiki-upgrade wiki-ingest wiki-query wiki-lint; do
+# Installa tutte le 6 skill globalmente
+for s in wiki-bootstrap wiki-upgrade wiki-ingest wiki-query wiki-lint wiki-briefing; do
   ln -sfn "$(pwd)/skills/$s" ~/.claude/skills/$s
 done
 ```
@@ -131,20 +133,21 @@ Oppure con parametri:
     └── src-*.md                  ← pagine source
 ```
 
-> **Nota**: `wiki-bootstrap` NON crea `.claude/skills/` nella wiki. Le 5 skill arrivano dal plugin globale.
+> **Nota**: `wiki-bootstrap` NON crea `.claude/skills/` nella wiki. Le 6 skill arrivano dal plugin globale.
 
 ## Struttura del plugin (questo repo)
 
 ```
 wiki-pattern-plugin/
 ├── .claude-plugin/
-│   └── plugin.json              ← manifest (5 skill)
+│   └── plugin.json              ← manifest (6 skill)
 ├── skills/
 │   ├── wiki-bootstrap/SKILL.md  ← meta: crea nuova wiki
 │   ├── wiki-upgrade/SKILL.md    ← meta: migra wiki esistente
 │   ├── wiki-ingest/SKILL.md     ← operativa: compila fonti
 │   ├── wiki-query/SKILL.md      ← operativa: risponde dalla wiki
-│   └── wiki-lint/SKILL.md       ← operativa: health-check
+│   ├── wiki-lint/SKILL.md       ← operativa: health-check
+│   └── wiki-briefing/SKILL.md   ← operativa: briefing TODO/bug/fatto recente
 ├── templates/                   ← rendered da bootstrap/upgrade
 │   ├── CLAUDE.md.tmpl
 │   ├── index.md.tmpl

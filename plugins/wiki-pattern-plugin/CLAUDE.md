@@ -11,19 +11,31 @@ Il pattern è documentato nelle skill di questo plugin. In sintesi:
 - `inbox/` — appunti effimeri, processati e rimossi dopo ingest
 - `wiki/` — output compilato, **LLM-owned**
 
-**Tre operazioni (slash command):**
+**Quattro operazioni (slash command):**
 - `/wiki-ingest` — compila fonti in pagine wiki (cascade + conflict annotation + cross-linker)
 - `/wiki-query` — risponde dalla wiki; su richiesta salva come archive page
 - `/wiki-lint` — auto-fix deterministico + report euristico
+- `/wiki-briefing` — briefing operativo (TODO/bug/fatto recente). Si attiva anche con saluti naturali (`buongiorno wiki`, `ciao wiki`, `cosa abbiamo fatto?`, `cosa è rimasto in sospeso?`). Solo nelle wiki col flag `stato_pages` attivo.
 
 **Tracking via stato derivato:** ogni pagina `wiki/src-*.md` ha `raw_source:` + `raw_source_hash:` (sha1). Nessun manifest esterno.
 
 ## Skill disponibili
 
+**Meta** (creano/migrano wiki):
+
 | Comando | Cosa fa |
 |---|---|
 | `/wiki-bootstrap` | Crea una nuova wiki tecnica da zero |
 | `/wiki-upgrade` | Migra una wiki esistente al pattern |
+
+**Operative** (lavorano dentro una wiki):
+
+| Comando | Cosa fa |
+|---|---|
+| `/wiki-ingest` | Compila fonti raw/inbox in pagine wiki (cascade + conflict + cross-linker) |
+| `/wiki-query` | Risponde dalla wiki; opzionale archive page |
+| `/wiki-lint` | Health-check: auto-fix deterministico + report euristico |
+| `/wiki-briefing` | Briefing TODO/bug/fatto recente. Solo se `stato_pages` attivo |
 
 ## Installazione
 

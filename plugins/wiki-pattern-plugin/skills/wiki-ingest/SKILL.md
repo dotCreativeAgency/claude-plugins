@@ -244,17 +244,30 @@ Per ogni pagina creata o materialmente aggiornata:
 - Updated: [[pagina-cascade-1]] (sezione X)
 - Tags new: <tag1>, <tag2>
 - Conflicts: <sintesi se presenti, altrimenti omesso>
+- Stato: <riassunto se feature flag attivo, altrimenti omesso>
 ```
+
+### Step 11 — STATO PAGES (modulo opzionale)
+
+*Eseguito **solo** se la wiki ha sezione "Modulo stato" nel CLAUDE.md (feature flag `stato_pages: true`) E i file `wiki/stato/todo.md` e `wiki/stato/bug-aperti.md` esistono. Altrimenti skip silenzioso.*
+
+Quando attivo, parsa dalla nota:
+- sezioni `## TODO emersi` / `## Bug aperti emersi` per **nuove** voci (assegna ID, scrive in `wiki/stato/`),
+- frontmatter `chiude_todo` / `chiude_bug` / `aggiorna_todo` / `aggiorna_bug` per **modifiche** a voci esistenti,
+- aggiungi una riga `Stato:` al blocco log dello Step 10 se almeno un'operazione è avvenuta.
+
+Per la sintassi delle righe TODO/Bug, lo schema dei blocchi `### TODO-NNN` / `### BUG-NNN`, le operazioni dettagliate sui file e gli edge case (`next_id` mancante, ID duplicato, modulo sconosciuto) → vedi `references/stato-module.md`.
 
 ---
 
 ## Processa file da inbox/
 
-Stesso flusso da Step 1 a Step 10, con queste differenze:
+Stesso flusso da Step 1 a Step 11, con queste differenze:
 
 - `raw_source:` è **omesso** nella pagina src-* (preferisci: niente src-* per gli inbox).
 - **Decidi se promuovere a raw/**: se il contenuto è autorevole/persistente, proponi `"Questo sembra contenuto autorevole. Promuoverlo a raw/<topic>/<slug>.md? [Y/n]"`. Se sì: `mv inbox/X.md raw/<topic>/X.md` e procedi come ingest da raw/.
 - Se NON promosso: dopo aver compilato le pagine wiki, **cancella** il file da inbox/. Append a log con operazione `inbox-process` invece di `ingest`.
+- **Step 11 (stato_pages) si esegue anche per inbox** se il flag è attivo: sezioni `## TODO emersi` / `## Bug aperti emersi` e frontmatter `chiude_*` / `aggiorna_*` sono parsati e applicati a `wiki/stato/` esattamente come per raw/. La differenza è solo che la "Fonte" registrata sulla voce sarà il nome dell'inbox (che verrà poi cancellato): annota `Fonte: inbox-process <data>` invece di `[[<src-slug>]]`.
 
 ---
 
