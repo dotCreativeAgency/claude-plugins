@@ -26,7 +26,7 @@ Cerca nella nota due sezioni opzionali:
 
 Sintassi riga: `- [<priorità>] [<modulo>] <titolo> — Owner: <owner> — Stima: <S|M|L>`. Le righe successive (indentate) sono campi opzionali (`Sintomo:`, `Note:`).
 
-**Schema modulo**: i moduli ammessi sono quelli elencati in CLAUDE.md della wiki (sezione "Moduli del progetto" o equivalente). Modulo non riconosciuto → warning, voce comunque aggiunta.
+**Schema modulo**: se il `CLAUDE.md` della wiki contiene una sezione che enumera i moduli del progetto (es. "Moduli del progetto" o tabella esplicita di moduli), valida `<modulo>` contro quella lista; modulo non riconosciuto → warning, voce comunque aggiunta. **Se nessuna lista moduli è presente** in CLAUDE.md → nessun vincolo, nessun warning (fail-open). La presenza di una lista moduli è opzionale e non scaffoldata da `wiki-bootstrap`.
 
 ## 11.b — Frontmatter di chiusura
 
@@ -46,8 +46,10 @@ aggiorna_bug:
 
 ## 11.c — Operazioni su `wiki/stato/todo.md`
 
+**Formato ID**: zero-padded a 3 cifre. `next_id: 1` → `TODO-001`, `next_id: 42` → `TODO-042`, `next_id: 1000` → `TODO-1000` (oltre le 999 il padding si estende naturalmente). Stessa regola per BUG (`BUG-001`, `BUG-042`, ...). Quando confronti ID per `chiude_*` / `aggiorna_*`, normalizza sempre alla forma padded a 3 cifre prima del match (così `chiude_todo: [TODO-42]` e `chiude_todo: [TODO-042]` sono entrambi accettati).
+
 1. **Read** del file. Estrai il `next_id:` dal frontmatter.
-2. Per ogni voce nella sezione `## TODO emersi`: assegna ID `TODO-<next_id>`, incrementa contatore, aggiungi blocco strutturato:
+2. Per ogni voce nella sezione `## TODO emersi`: assegna ID `TODO-NNN` (formato sopra), incrementa contatore, aggiungi blocco strutturato:
    ```markdown
    ### TODO-NNN — <titolo>
    - Modulo: <modulo>

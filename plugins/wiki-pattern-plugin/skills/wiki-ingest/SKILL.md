@@ -262,11 +262,12 @@ Per la sintassi delle righe TODO/Bug, lo schema dei blocchi `### TODO-NNN` / `##
 
 ## Processa file da inbox/
 
-Stesso flusso da Step 1 a Step 10, con queste differenze:
+Stesso flusso da Step 1 a Step 11, con queste differenze:
 
 - `raw_source:` è **omesso** nella pagina src-* (preferisci: niente src-* per gli inbox).
 - **Decidi se promuovere a raw/**: se il contenuto è autorevole/persistente, proponi `"Questo sembra contenuto autorevole. Promuoverlo a raw/<topic>/<slug>.md? [Y/n]"`. Se sì: `mv inbox/X.md raw/<topic>/X.md` e procedi come ingest da raw/.
 - Se NON promosso: dopo aver compilato le pagine wiki, **cancella** il file da inbox/. Append a log con operazione `inbox-process` invece di `ingest`.
+- **Step 11 (stato_pages) si esegue anche per inbox** se il flag è attivo: sezioni `## TODO emersi` / `## Bug aperti emersi` e frontmatter `chiude_*` / `aggiorna_*` sono parsati e applicati a `wiki/stato/` esattamente come per raw/. La differenza è solo che la "Fonte" registrata sulla voce sarà il nome dell'inbox (che verrà poi cancellato): annota `Fonte: inbox-process <data>` invece di `[[<src-slug>]]`.
 
 ---
 

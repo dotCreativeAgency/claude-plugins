@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Claude Code plugins by dotCreativeAgency",
-    "version": "1.2.1"
+    "version": "1.2.2"
   },
   "plugins": [
     {
@@ -35,7 +35,7 @@
       "name": "wiki-pattern-plugin",
       "source": "./plugins/wiki-pattern-plugin",
       "description": "Plugin Claude Code per costruire e mantenere wiki tecniche LLM-mantenute. Implementa il pattern LLM Wiki di Karpathy con 12 estensioni (cascade, conflict annotation, archive pages, cross-linker, lint split, provenance markers, registro tag, modulo stato con TODO/bug e briefing operativo). Espone 6 skill: wiki-bootstrap, wiki-upgrade, wiki-ingest, wiki-query, wiki-lint, wiki-briefing.",
-      "version": "0.3.1",
+      "version": "0.3.2",
       "author": {
         "name": "dotCreativeAgency"
       },

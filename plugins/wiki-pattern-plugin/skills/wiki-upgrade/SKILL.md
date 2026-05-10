@@ -138,7 +138,7 @@ Crea `<WIKI_ROOT>/wiki/stato/todo.md` e `<WIKI_ROOT>/wiki/stato/bug-aperti.md` c
 
 Se i file già esistono: skip silenzioso.
 
-In CLAUDE.md, appendi la sezione "Modulo stato" del template (vedi blocco `<!-- IF stato-pages -->` in `${CLAUDE_PLUGIN_ROOT}/templates/CLAUDE.md.tmpl`).
+In CLAUDE.md, appendi la sezione "Modulo stato" del template. **Verifica prima che non esista già** (anche con titolo diverso ma contenuto equivalente): se è già presente, skip silenzioso — non duplicare. Il template `${CLAUDE_PLUGIN_ROOT}/templates/CLAUDE.md.tmpl` contiene **tre** blocchi `<!-- IF stato-pages -->`: appendere SOLO il blocco con heading `## Modulo stato` (l'unico che è una sezione vera e propria). Gli altri due blocchi sono frammenti contestuali (riga di tree e riga di tabella Operazioni) che non vanno appesi a EOF — se vuoi integrarli devi inserirli dentro la struttura esistente del CLAUDE.md della wiki, altrimenti ometti (M5a non rifà tree/tabella, è "solo append").
 
 ### M5 — Cleanup skill inline obsolete
 

@@ -18,7 +18,7 @@ Marketplace di plugin per Claude Code.
 |--------|----------|-------------|
 | [frontend-pipeline](./plugins/frontend-pipeline) | 1.3.1 | Pipeline automatizzata per lo sviluppo frontend React + MUI + TypeScript con 5 agenti specializzati e chain enforcement basata su skill |
 | [code-explainer](./plugins/code-explainer) | 1.0.0 | Spiega il codice con diagrammi ASCII, analogie quotidiane, walkthrough passo-passo e gotcha comuni |
-| [wiki-pattern-plugin](./plugins/wiki-pattern-plugin) | 0.3.1 | Costruisce e mantiene wiki tecniche LLM-mantenute (pattern Karpathy esteso). 6 skill: bootstrap, upgrade, ingest, query, lint, briefing |
+| [wiki-pattern-plugin](./plugins/wiki-pattern-plugin) | 0.3.2 | Costruisce e mantiene wiki tecniche LLM-mantenute (pattern Karpathy esteso). 6 skill: bootstrap, upgrade, ingest, query, lint, briefing |
 
 ## Contribuire
 

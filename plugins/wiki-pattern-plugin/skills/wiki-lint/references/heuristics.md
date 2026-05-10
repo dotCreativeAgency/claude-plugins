@@ -28,7 +28,7 @@ find wiki -name '*.md' | while read -r f; do
   echo "$count $f"
 done | awk '$1 == 0'
 ```
-Escludi src-* (sono spesso tecnicamente orfane ma intenzionalmente).
+Escludi src-* (sono spesso tecnicamente orfane ma intenzionalmente). Escludi anche `wiki/stato/*` — il modulo stato è scritto da `wiki-ingest` Step 11 e letto da `/wiki-briefing`, ma per design non è mai linkato da pagine compilate.
 
 ## H5 — Cross-topic references mancanti
 
@@ -99,7 +99,7 @@ Per pagine `archive: true`: confronta `archived_at` con `updated:` delle pagine 
 Scansiona `wiki/stato/todo.md` e `wiki/stato/bug-aperti.md`:
 - Voci aperte da **>30 giorni** (calcolato da `Aperto:` vs oggi) → "stantio: rivedere priorità o chiudere"
 - Voci con campi obbligatori mancanti (`Modulo`, `Priorità`, `Owner`, `Stima`, `Aperto`) → "frontmatter incompleto"
-- Voci con `Modulo:` non presente nella tabella moduli del CLAUDE.md → "modulo sconosciuto"
+- Voci con `Modulo:` non presente nella tabella moduli del CLAUDE.md → "modulo sconosciuto" *(skip se CLAUDE.md non contiene una lista moduli — la lista è opzionale)*
 - Bug P0 aperti da **>3 giorni** → "P0 di lunga durata: verificare che sia ancora P0"
 
 ## H13 — Closure pendenti
