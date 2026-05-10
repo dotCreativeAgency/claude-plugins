@@ -244,7 +244,19 @@ Per ogni pagina creata o materialmente aggiornata:
 - Updated: [[pagina-cascade-1]] (sezione X)
 - Tags new: <tag1>, <tag2>
 - Conflicts: <sintesi se presenti, altrimenti omesso>
+- Stato: <riassunto se feature flag attivo, altrimenti omesso>
 ```
+
+### Step 11 — STATO PAGES (modulo opzionale)
+
+*Eseguito **solo** se la wiki ha sezione "Modulo stato" nel CLAUDE.md (feature flag `stato_pages: true`) E i file `wiki/stato/todo.md` e `wiki/stato/bug-aperti.md` esistono. Altrimenti skip silenzioso.*
+
+Quando attivo, parsa dalla nota:
+- sezioni `## TODO emersi` / `## Bug aperti emersi` per **nuove** voci (assegna ID, scrive in `wiki/stato/`),
+- frontmatter `chiude_todo` / `chiude_bug` / `aggiorna_todo` / `aggiorna_bug` per **modifiche** a voci esistenti,
+- aggiungi una riga `Stato:` al blocco log dello Step 10 se almeno un'operazione è avvenuta.
+
+Per la sintassi delle righe TODO/Bug, lo schema dei blocchi `### TODO-NNN` / `### BUG-NNN`, le operazioni dettagliate sui file e gli edge case (`next_id` mancante, ID duplicato, modulo sconosciuto) → vedi `references/stato-module.md`.
 
 ---
 

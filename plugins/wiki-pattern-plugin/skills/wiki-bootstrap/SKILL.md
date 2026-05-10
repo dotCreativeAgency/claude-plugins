@@ -23,6 +23,7 @@ Se non forniti come argomenti, chiedi interattivamente:
    - `--archive-pages [yes|no]` — abilita archive pages da query (default: yes)
    - `--provenance [light|strict|off]` — tracking provenance (default: light)
    - `--cross-linker [auto|manual]` — cross-linker post-ingest (default: auto)
+   - `--stato-pages [yes|no]` — abilita modulo stato (todo.md + bug-aperti.md + briefing) (default: yes)
 
 **Shortcut**: se l'utente scrive `/wiki-bootstrap --domain "Vue 4" --path ~/wiki-vue4` passa direttamente allo Step 2 con i default per tutto il resto.
 
@@ -40,6 +41,7 @@ Se non forniti come argomenti, chiedi interattivamente:
 | `{{ARCHIVE_PAGES}}` | "yes" o "no" | "yes" |
 | `{{PROVENANCE}}` | "light", "strict", o "off" | "light" |
 | `{{CROSS_LINKER}}` | "auto" o "manual" | "auto" |
+| `{{STATO_PAGES}}` | "yes" o "no" | "yes" |
 
 ---
 
@@ -64,6 +66,41 @@ mkdir -p <WIKI_ROOT>/wiki/comparisons
 mkdir -p <WIKI_ROOT>/wiki/concepts
 mkdir -p <WIKI_ROOT>/wiki/entities
 mkdir -p <WIKI_ROOT>/wiki/references
+
+# Solo se --stato-pages=yes:
+mkdir -p <WIKI_ROOT>/wiki/stato
+```
+
+Se `--stato-pages=yes`: crea due file iniziali con frontmatter pronto:
+
+`<WIKI_ROOT>/wiki/stato/todo.md`:
+```markdown
+---
+titolo: "TODO aperti"
+categoria: stato
+tags: [stato, todo]
+data_aggiornamento: {{TODAY}}
+next_id: 1
+---
+
+# TODO aperti
+
+_Nessun TODO aperto. Aggiungi voci tramite ingest di note raw/inbox con sezione `## TODO emersi`._
+```
+
+`<WIKI_ROOT>/wiki/stato/bug-aperti.md`:
+```markdown
+---
+titolo: "Bug aperti"
+categoria: stato
+tags: [stato, bug]
+data_aggiornamento: {{TODAY}}
+next_id: 1
+---
+
+# Bug aperti
+
+_Nessun bug aperto. Aggiungi voci tramite ingest di note raw/inbox con sezione `## Bug aperti emersi`._
 ```
 
 > **Nota**: NON creare `.claude/skills/`. Le skill operative arrivano dal plugin globale.
@@ -102,6 +139,7 @@ Per ogni `<!-- IF <condition> -->...<!-- END <condition> -->`:
 | `IF provenance-strict` | parametro `--provenance` è "strict" |
 | `IF cross-linker-auto` | parametro `--cross-linker` è "auto" |
 | `IF cross-linker-manual` | parametro `--cross-linker` è "manual" |
+| `IF stato-pages` | parametro `--stato-pages` è "yes" |
 
 ---
 
@@ -140,9 +178,10 @@ Per ogni `<!-- IF <condition> -->...<!-- END <condition> -->`:
    wiki/        → pagine compilate (vuoto, popolato dall'ingest)
 
 ⚙️ Skill operative disponibili (dal plugin globale):
-   /wiki-ingest  → compila fonti in pagine wiki
-   /wiki-query   → risponde dalla wiki
-   /wiki-lint    → controllo qualità
+   /wiki-ingest   → compila fonti in pagine wiki
+   /wiki-query    → risponde dalla wiki
+   /wiki-lint     → controllo qualità
+   /wiki-briefing → briefing operativo (TODO/bug/fatto recente) — solo se stato_pages attivo
 
 🔧 Configurazione:
    type: <type> | lang: {{LANG}}
